@@ -1,0 +1,43 @@
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const toEmail = process.env.CONTACT_EMAIL || process.env.CONTACT_TO_EMAIL;
+
+export async function POST(request: Request) {
+  try {
+    const { name, email, message } = await request.json();
+
+    if (!process.env.RESEND_API_KEY || !toEmail) {
+      return NextResponse.json(
+        { error: "Email service is not configured." },
+        { status: 500 }
+      );
+    }
+
+    if (
+      !name ||
+      typeof name !== "string" ||
+      !email ||
+      typeof email !== "string" ||
+      !message ||
+      typeof message !== "string"
+    ) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    }
+
+    await resend.emails.send({
+      from: "AI Lab <noreply@yourdomain.com>",
+      to: [toEmail],
+      subject: `AI Lab contact form from ${name}`,
+      reply_to: email,
+      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to send message";
+    console.error("Contact form error:", error);
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
+}

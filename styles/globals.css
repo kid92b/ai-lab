@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030712;
+  --foreground: #e5e7eb;
+  --glow-1: #0ea5e9;
+  --glow-2: #6366f1;
+  color-scheme: dark;
+}
+
+.dark {
+  --background: #030712;
+  --foreground: #e5e7eb;
+  --glow-1: #0ea5e9;
+  --glow-2: #6366f1;
+  color-scheme: dark;
+}
+
+.light {
+  --background: #f7fafc;
+  --foreground: #0b1224;
+  --glow-1: #c7d2fe;
+  --glow-2: #a5b4fc;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-grotesk);
+}
+
+body {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      circle at 20% 20%,
+      color-mix(in srgb, var(--glow-1) 25%, transparent),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 80% 0%,
+      color-mix(in srgb, var(--glow-2) 18%, transparent),
+      transparent 28%
+    ),
+    linear-gradient(135deg, rgba(12, 19, 39, 0.9), rgba(3, 7, 18, 0.95));
+  color: var(--foreground);
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.3s ease;
+}
+
+.animate-fade-slide {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+  will-change: opacity, transform;
+}
+
+.animate-fade-slide.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes pulse-float {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-14px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes dash-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@layer utilities {
+  .ai-lab-bg {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.26), transparent 55%),
+      radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.22), transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(8, 47, 73, 0.85), transparent 60%),
+      radial-gradient(circle at 50% 30%, #020617, #020617);
+  }
+
+  .ai-lab-bg-light {
+    background:
+      radial-gradient(circle at 0% 0%, rgba(148, 163, 184, 0.35), transparent 55%),
+      radial-gradient(circle at 100% 0%, rgba(191, 219, 254, 0.3), transparent 55%),
+      radial-gradient(circle at 50% 100%, rgba(148, 163, 184, 0.55), transparent 60%),
+      radial-gradient(circle at 50% 30%, #0f172a, #020617);
+  }
+
+  .ai-lab-bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .ai-lab-noise {
+    position: absolute;
+    inset: -30%;
+    opacity: 0.18;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+    animation: ai-noise-move 22s linear infinite alternate;
+  }
+
+  .ai-lab-orbit {
+    position: absolute;
+    top: -140px;
+    left: 50%;
+    width: 780px;
+    height: 780px;
+    transform: translateX(-50%);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.32), transparent 65%);
+    filter: blur(90px);
+    opacity: 0.8;
+    animation: ai-orbit-pulse 26s ease-in-out infinite alternate;
+  }
+
+  @keyframes ai-noise-move {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% {
+      transform: translate3d(-6%, -8%, 0) scale(1.06);
+    }
+  }
+
+  @keyframes ai-orbit-pulse {
+    0% {
+      transform: translateX(-50%) translateY(0) scale(1);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateX(-50%) translateY(40px) scale(1.12);
+      opacity: 0.95;
+    }
+  }
+}
