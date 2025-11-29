@@ -6,7 +6,7 @@ export function BackgroundFX() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const target = useRef({ x: 0, y: 0 });
   const current = useRef({ x: 0, y: 0 });
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
