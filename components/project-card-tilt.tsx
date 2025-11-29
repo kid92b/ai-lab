@@ -20,7 +20,7 @@ export function ProjectCardTilt({ title, description, tags, image, link }: Proje
     () => ({
       initial: { opacity: 0, y: 24 },
       animate: { opacity: 1, y: 0 },
-      transition: { duration: 0.4, ease: "easeOut" },
+      transition: { duration: 0.4 },
     }),
     []
   );
