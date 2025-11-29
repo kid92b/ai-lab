@@ -1,11 +1,12 @@
 "use client";
 
 import { motion, useAnimation } from "framer-motion";
+import type React from "react";
 import { useEffect } from "react";
 import { useInView } from "@/hooks/use-in-view";
 
 type AnimatedSectionProps = {
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
   delay?: number;
   className?: string;
   children: React.ReactNode;
