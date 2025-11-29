@@ -9,7 +9,7 @@ type ProjectCardProps = {
 
 export function ProjectCard({ title, description }: ProjectCardProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
-  const frame = useRef<number>();
+  const frame = useRef<number | null>(null);
   const [transform, setTransform] = useState("rotateX(0deg) rotateY(0deg)");
 
   useEffect(() => {
