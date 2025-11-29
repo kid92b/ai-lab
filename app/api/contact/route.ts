@@ -27,11 +27,10 @@ export async function POST(request: Request) {
     }
 
     await resend.emails.send({
-      from: "AI Lab <noreply@yourdomain.com>",
+      from: process.env.RESEND_FROM as string,
       to: [toEmail],
       subject: `AI Lab contact form from ${name}`,
-      reply_to: email,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     });
 
     return NextResponse.json({ ok: true });
