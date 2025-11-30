@@ -10,15 +10,22 @@ export type Language = (typeof LANGUAGES)[number];
 
 const STORAGE_KEY = "ai-lab-language";
 
-const translations = {
-  en,
-  uk,
-  pl,
-};
+type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
+type NestedKeys<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string ? `${K}${DotPrefix<NestedKeys<T[K]>>}` : never;
+    }[keyof T]
+  : "";
 
 type Translation = typeof en;
 
-export type TranslationKey = string;
+type TranslationKey = NestedKeys<Translation>;
+
+const translations: Record<Language, Translation> = {
+  en: en as Translation,
+  uk: uk as Translation,
+  pl: pl as Translation,
+};
 
 type LanguageContextValue = {
   language: Language;
@@ -67,7 +74,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const value = useMemo<LanguageContextValue>(() => {
     const t = (key: TranslationKey) =>
-      resolveTranslation(key, translations[language]) ?? `missing:${key}`;
+      resolveTranslation(key, translations[language] as Translation) ?? `missing:${key}`;
 
     return {
       language,
