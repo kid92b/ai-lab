@@ -10,16 +10,10 @@ export type Language = (typeof LANGUAGES)[number];
 
 const STORAGE_KEY = "ai-lab-language";
 
-type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
-type NestedKeys<T> = T extends object
-  ? {
-      [K in keyof T]: K extends string ? `${K}${DotPrefix<NestedKeys<T[K]>>}` : never;
-    }[keyof T]
-  : "";
-
 type Translation = typeof en;
 
-type TranslationKey = NestedKeys<Translation>;
+// Больше не вычисляем вложенные ключи типами — просто строка.
+type TranslationKey = string;
 
 const translations: Record<Language, Translation> = {
   en: en as Translation,
@@ -35,16 +29,13 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-function resolveTranslation(key: string, dictionary: Translation): string {
-  const value = key.split(".").reduce<unknown>((acc, part) => {
+function resolveTranslation(key: TranslationKey, dictionary: Translation): string {
+  return key.split(".").reduce((acc: unknown, part) => {
     if (typeof acc === "object" && acc && part in acc) {
       return (acc as Record<string, unknown>)[part];
     }
-    // если по пути ключа ничего нет — просто возвращаем пустую строку
     return "";
-  }, dictionary as unknown);
-
-  return typeof value === "string" ? value : "";
+  }, dictionary) as string;
 }
 
 type LanguageProviderProps = {
@@ -74,14 +65,14 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const value = useMemo<LanguageContextValue>(() => {
     const t = (key: TranslationKey) =>
-      resolveTranslation(key, translations[language] as Translation) ?? `missing:${key}`;
+      resolveTranslation(key, translations[language]) || `missing:${key}`;
 
     return {
       language,
-      setLanguage,
       t,
+      setLanguage,
     };
-  }, [language]);
+  }, [language, setLanguage]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
