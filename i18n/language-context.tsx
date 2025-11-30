@@ -18,14 +18,7 @@ const translations = {
 
 type Translation = typeof en;
 
-type DotPrefix<T extends string> = T extends "" ? "" : `.${T}`;
-type NestedKeys<T> = T extends object
-  ? {
-      [K in keyof T]: K extends string ? `${K}${DotPrefix<NestedKeys<T[K]>>}` : never;
-    }[keyof T]
-  : "";
-
-export type TranslationKey = NestedKeys<Translation>;
+export type TranslationKey = string;
 
 type LanguageContextValue = {
   language: Language;
