@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const toEmail = process.env.CONTACT_EMAIL || process.env.CONTACT_TO_EMAIL;
 
 export async function POST(request: Request) {
@@ -25,6 +24,8 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
       from: process.env.RESEND_FROM as string,

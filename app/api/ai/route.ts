@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 export async function POST(req: Request) {
   try {
     const { message, lang, history } = await req.json();
@@ -12,6 +8,10 @@ export async function POST(req: Request) {
     if (!process.env.GROQ_API_KEY) {
       return NextResponse.json({ error: "GROQ_API_KEY is missing" }, { status: 500 });
     }
+
+    const client = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
 
     if (!message || typeof message !== "string") {
       return NextResponse.json({ error: "No message provided" }, { status: 400 });
