@@ -10,15 +10,15 @@ export type Language = (typeof LANGUAGES)[number];
 
 const STORAGE_KEY = "ai-lab-language";
 
-type Translation = typeof en;
+type Translation = Record<string, unknown>;
 
 // Больше не вычисляем вложенные ключи типами — просто строка.
 type TranslationKey = string;
 
 const translations: Record<Language, Translation> = {
-  en: en as Translation,
-  uk: uk as Translation,
-  pl: pl as Translation,
+  en,
+  uk,
+  pl,
 };
 
 type LanguageContextValue = {
