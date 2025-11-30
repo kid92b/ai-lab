@@ -29,12 +29,15 @@ type LanguageContextValue = {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function resolveTranslation(key: string, dictionary: Translation): string {
-  return key.split(".").reduce((acc: unknown, part) => {
+  const value = key.split(".").reduce<unknown>((acc, part) => {
     if (typeof acc === "object" && acc && part in acc) {
       return (acc as Record<string, unknown>)[part];
     }
-    return undefined;
-  }, dictionary) as string | undefined;
+    // если по пути ключа ничего нет — просто возвращаем пустую строку
+    return "";
+  }, dictionary as unknown);
+
+  return typeof value === "string" ? value : "";
 }
 
 type LanguageProviderProps = {
